@@ -27,6 +27,63 @@ data2 = ImageDataBunch.single_from_classes(path, classes, tfms=get_transforms(),
 learn = create_cnn(data2, models.resnet34)
 learn.load('rest-saved-model1')
 
+index_html = """
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Restaurant:crowded-or-empty</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+  </head>
+
+  <body class="bg-light">
+
+    <div class="container">
+      <div class="py-5 text-center">
+        <h2>Restaurant: Crowded or Empty</h2>
+        <p class="lead">This is an image classifier API that takes in an image of a restaurant interior and predicts if the restaurant is crowded or empty.</p>
+      </div>
+<div class="row justify-content-center">
+    <div class="col-6">
+      
+      <form  action="/upload" method="post" enctype="multipart/form-data">
+        <h4 class="mb-3">Select image to upload:</h4>
+        <div class="form-group">
+            <input type="file" name="file">
+            <input type="submit" value="Upload Image">
+        </div>
+        </form>
+      
+      <br><br>
+      <h4 class="mb-3">Or submit a URL::</h4>
+        
+        <form action="/classify-url" method="get">
+            <input type="url" name="url">
+            <input type="submit" value="Fetch and analyze image">
+          </form
+          
+
+  </div>
+        
+
+      <footer class="my-5 pt-5 text-muted text-center text-small">
+        <p class="mb-1">Made by <a target="_" href="https://github.com/dhth/">dhruv</a></p>
+        <ul class="list-inline">
+          <li class="list-inline-item"><a target="_" href="https://github.com/dhth/restaurant-crowded-or-not">source</a></li>
+        </ul>
+      </footer>
+    </div>
+    
+  </body>
+</html>
+"""
+
 
 @app.route("/upload", methods=["POST"])
 async def upload(request):
@@ -51,19 +108,7 @@ def predict_image_from_bytes(bytes):
 
 @app.route("/")
 def form(request):
-    return HTMLResponse(
-        """
-        <form action="/upload" method="post" enctype="multipart/form-data">
-            Select image to upload:
-            <input type="file" name="file">
-            <input type="submit" value="Upload Image">
-        </form>
-        Or submit a URL:
-        <form action="/classify-url" method="get">
-            <input type="url" name="url">
-            <input type="submit" value="Fetch and analyze image">
-        </form>
-    """)
+    return HTMLResponse(index_html)
 
 
 @app.route("/form")
